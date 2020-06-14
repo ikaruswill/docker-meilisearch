@@ -1,0 +1,52 @@
+---
+kind: pipeline
+name: linux-arm64
+type: kubernetes
+
+platform:
+  os: linux
+  arch: arm64
+
+clone:
+  depth: 1
+
+steps:
+- name: publish
+  image: plugins/docker
+  environment:
+    PLUGIN_MTU: 1440
+  resources:
+    requests:
+      cpu: 500
+      memory: 100MiB
+    limits:
+      cpu: 500
+      memory: 100MiB
+  settings:
+    repo: ikaruswill/meilisearch
+    auto_tag: true
+    build_args:
+    - MEILISEARCH_VERSION=${DRONE_TAG}
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+node_selector:
+  kubernetes.io/arch: arm64
+
+trigger:
+  ref:
+  - refs/tags/*
+
+---
+kind: secret
+name: docker_username
+get:
+  path: drone-secrets
+  name: docker_username
+---
+kind: secret
+name: docker_password
+get:
+  path: drone-secrets
+  name: docker_password
