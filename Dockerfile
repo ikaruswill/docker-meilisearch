@@ -1,4 +1,4 @@
-FROM    alpine:3.10
+FROM    debian:buster-slim
 ARG     MEILISEARCH_VERSION
 RUN     apk add -q --no-cache libgcc tini
 RUN     wget -O ./meilisearch https://github.com/meilisearch/MeiliSearch/releases/download/${MEILISEARCH_VERSION}/meilisearch-linux-armv8 \
